@@ -4,6 +4,10 @@
 
 #include <SDL2/SDL.h>
 
+#define MATH_PI  3.14159265358979323846
+#define MATH_TAU 6.28318530717958647692
+
+#define TURNS(x) (MATH_TAU*(x))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define UNUSED(x) ((void)(x))
@@ -60,7 +64,7 @@ internal Render_Context create_render_context(unsigned int width, unsigned int h
     return(render_context);
 }
 
-internal void clear_render_context(Render_Context *ctx)
+internal void destroy_render_context(Render_Context *ctx)
 {
     SDL_DestroyWindow(ctx->window);
     SDL_DestroyRenderer(ctx->renderer);
@@ -111,7 +115,7 @@ int main(int argc, char **argv)
         }
     }
 
-    clear_render_context(&ctx);
+    destroy_render_context(&ctx);
     
     return 0;
 }
