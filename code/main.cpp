@@ -23,7 +23,7 @@
 #define internal static
 #define global static
 
-#define FPS 30
+#define FPS 60
 #define MS_PER_FRAME (1000/FPS)
 #define WIDTH 800
 #define HEIGHT 600
