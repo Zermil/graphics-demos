@@ -50,9 +50,9 @@ internal void render_triangle(int x0, int y0,
                 (u2 >= 0.0f && u2 <= 1.0f))
             {
                 // @Note: Point in triangle.
-                int r = (int) (255.0f * u0);
-                int g = (int) (255.0f * u1);
-                int b = (int) (255.0f * u2);
+                unsigned int r = (unsigned int) (255.0f * u0);
+                unsigned int g = (unsigned int) (255.0f * u1);
+                unsigned int b = (unsigned int) (255.0f * u2);
 
                 uint32_t out_color = (r << 3*8) | (g << 2*8) | (b << 1*8) | 0xFF;
                 ARRAY_AT(frame_buffer, x, y) = out_color;
@@ -103,5 +103,5 @@ internal void render(float dt)
     rotate_points(&x0, &y0, &x1, &y1, &x2, &y2, TURNS(g_angle));
     render_triangle(x0, y0, x1, y1, x2, y2);
 
-    g_angle += TURNS(0.03f)*dt;
+    g_angle += TURNS(0.05f)*dt;
 }
