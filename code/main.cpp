@@ -28,6 +28,7 @@
 #define WIDTH 800
 #define HEIGHT 600
 
+#define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(arr[0]))
 #define ARRAY_AT(arr, x, y) ((arr)[(y)*WIDTH + (x)])
 global uint32_t frame_buffer[WIDTH*HEIGHT] = {0};
 
