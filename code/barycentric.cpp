@@ -1,5 +1,7 @@
 #include "main.cpp"
 
+global float g_angle = 0.0f;
+
 // @Note: This is nothing special, we're just copy-pasting our formula
 // that we previously derived.
 internal bool get_barycentric_coordinates(int x0, int y0,
@@ -37,8 +39,11 @@ internal void render_triangle(int x0, int y0,
     
     for (int y = y_min; y <= y_max; ++y) {
         for (int x = x_min; x <= x_max; ++x) {
+            // @Note: Boundary check.
+            if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) continue;
+            
             if (!get_barycentric_coordinates(x0, y0, x1, y1, x2, y2, x, y, &u0, &u1, &u2)) continue;
-
+            
             // @Note: This expression can be simplified in various ways.
             if ((u0 >= 0.0f && u0 <= 1.0f) &&
                 (u1 >= 0.0f && u1 <= 1.0f) &&
@@ -56,18 +61,47 @@ internal void render_triangle(int x0, int y0,
     }
 }
 
-internal void render(float dt)
+// @Note: Yes, this could be a bunch of 'struct Point {};' or similar
+// however I wanted to make something more generic and not force a type
+// for the sake of demonstration.
+internal void rotate_points(int *x0, int *y0,
+                            int *x1, int *y1,
+                            int *x2, int *y2,
+                            float angle)
 {
-    UNUSED(dt);
+    const int cx = (*x0 + *x1 + *x2)/3;
+    const int cy = (*y0 + *y1 + *y2)/3;
+    const float sine = sinf(angle);
+    const float cosine = cosf(angle);
 
-    int x0 = WIDTH/2;
-    int y0 = 0;
-
-    int x1 = 0;
-    int y1 = HEIGHT;
-
-    int x2 = WIDTH;
-    int y2 = HEIGHT;
+    int dx0 = *x0 - cx;
+    int dy0 = *y0 - cy;
+    int dx1 = *x1 - cx;
+    int dy1 = *y1 - cy;
+    int dx2 = *x2 - cx;
+    int dy2 = *y2 - cy;
     
+    *x0 = (int) (cx + dx0*cosine - dy0*sine);
+    *y0 = (int) (cy + dx0*sine + dy0*cosine);
+
+    *x1 = (int) (cx + dx1*cosine - dy1*sine);
+    *y1 = (int) (cy + dx1*sine + dy1*cosine);
+    
+    *x2 = (int) (cx + dx2*cosine - dy2*sine);
+    *y2 = (int) (cy + dx2*sine + dy2*cosine);
+}
+
+internal void render(float dt)
+{    
+    int x0 = WIDTH/2;
+    int y0 = HEIGHT/4;
+    int x1 = WIDTH/3;
+    int y1 = HEIGHT - HEIGHT/3;
+    int x2 = WIDTH - WIDTH/3;
+    int y2 = HEIGHT - HEIGHT/3;
+  
+    rotate_points(&x0, &y0, &x1, &y1, &x2, &y2, TURNS(g_angle));
     render_triangle(x0, y0, x1, y1, x2, y2);
+
+    g_angle += TURNS(0.03f)*dt;
 }
