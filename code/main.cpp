@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <math.h>
 
 #include <SDL2/SDL.h>
 
-#define MATH_PI  3.14159265358979323846
-#define MATH_TAU 6.28318530717958647692
+#define MATH_PI  3.14159265358979323846f
+#define MATH_TAU 6.28318530717958647692f
 
 #define TURNS(x) (MATH_TAU*(x))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
