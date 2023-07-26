@@ -2,6 +2,26 @@
 
 global float g_angle = 0.0f;
 
+struct Vec2 {
+    int x;
+    int y;
+};
+
+// @Note: This is just the basic formula for point/vector rotation.
+internal void vec2_rotate_many_points_around(Vec2 *points, size_t length, Vec2 *centroid)
+{
+    ERROR_EXIT(points == NULL, "[ERROR]: Array of points was NULL\n");
+    
+    const float sine = sinf(g_angle);
+    const float cosine = cosf(g_angle);
+    
+    for (size_t i = 0; i < length; ++i) {
+        Vec2 rot = { points[i].x - centroid->x, points[i].y - centroid->y };
+        points[i].x = (int) (centroid->x + rot.x*cosine - rot.y*sine);
+        points[i].y = (int) (centroid->y + rot.x*sine + rot.y*cosine);
+    }
+}
+
 // @Note: This is nothing special, we're just copy-pasting our formula
 // that we previously derived.
 internal bool get_barycentric_coordinates(int x0, int y0,
@@ -61,47 +81,21 @@ internal void render_triangle(int x0, int y0,
     }
 }
 
-// @Note: Yes, this could be a bunch of 'struct Point {};' or similar
-// however I wanted to make something more generic and not force a type
-// for the sake of demonstration.
-internal void rotate_points(int *x0, int *y0,
-                            int *x1, int *y1,
-                            int *x2, int *y2,
-                            float angle)
-{
-    const int cx = (*x0 + *x1 + *x2)/3;
-    const int cy = (*y0 + *y1 + *y2)/3;
-    const float sine = sinf(angle);
-    const float cosine = cosf(angle);
-
-    int dx0 = *x0 - cx;
-    int dy0 = *y0 - cy;
-    int dx1 = *x1 - cx;
-    int dy1 = *y1 - cy;
-    int dx2 = *x2 - cx;
-    int dy2 = *y2 - cy;
-    
-    *x0 = (int) (cx + dx0*cosine - dy0*sine);
-    *y0 = (int) (cy + dx0*sine + dy0*cosine);
-
-    *x1 = (int) (cx + dx1*cosine - dy1*sine);
-    *y1 = (int) (cy + dx1*sine + dy1*cosine);
-    
-    *x2 = (int) (cx + dx2*cosine - dy2*sine);
-    *y2 = (int) (cy + dx2*sine + dy2*cosine);
-}
-
 internal void render(float dt)
-{    
-    int x0 = WIDTH/2;
-    int y0 = HEIGHT/4;
-    int x1 = WIDTH/3;
-    int y1 = HEIGHT - HEIGHT/3;
-    int x2 = WIDTH - WIDTH/3;
-    int y2 = HEIGHT - HEIGHT/3;
-  
-    rotate_points(&x0, &y0, &x1, &y1, &x2, &y2, TURNS(g_angle));
-    render_triangle(x0, y0, x1, y1, x2, y2);
+{
+    g_angle += TURNS(0.20f)*dt;
 
-    g_angle += TURNS(0.05f)*dt;
+    Vec2 p[] = {
+        { WIDTH/2, HEIGHT/4 },
+        { WIDTH/3, HEIGHT - HEIGHT/3 },
+        { WIDTH - WIDTH/3, HEIGHT - HEIGHT/3 },
+    };
+    
+    Vec2 centroid = {
+        (p[0].x + p[1].x + p[2].x)/3,
+        (p[0].y + p[1].y + p[2].y)/3
+    };
+    
+    vec2_rotate_many_points_around(p, ARRAY_SIZE(p), &centroid);
+    render_triangle(p[0].x, p[0].y, p[1].x, p[1].y, p[2].x, p[2].y);
 }
