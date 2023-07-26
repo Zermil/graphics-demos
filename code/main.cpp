@@ -82,6 +82,7 @@ int main(int argc, char **argv)
 
     Render_Context ctx = create_render_context(WIDTH, HEIGHT, "A window");
     bool should_quit = false;
+    bool paused = false;
     
     int current_time = 0;
     int previous_time = SDL_GetTicks();
@@ -99,19 +100,35 @@ int main(int argc, char **argv)
                 case SDL_QUIT: {
                     should_quit = true;
                 } break;
+
+                case SDL_KEYUP: {
+                    switch (e.key.keysym.sym) {
+                        case SDLK_SPACE: {
+                            paused = !paused;
+                        } break;
+
+                        case SDLK_q:
+                        case SDLK_ESCAPE: {
+                            should_quit = true;
+                        } break;
+                    }
+                }
             }
         }
+        
+        if (!paused) {
+            for (size_t i = 0; i < WIDTH*HEIGHT; ++i) {
+                frame_buffer[i] = 0x181818FF;
+            }
 
-        for (size_t i = 0; i < WIDTH*HEIGHT; ++i) {
-            frame_buffer[i] = 0x181818FF;
+            render(dt);
+
+            SDL_UpdateTexture(ctx.buffer_texture, NULL, frame_buffer, sizeof(uint32_t)*WIDTH);
+            SDL_RenderCopy(ctx.renderer, ctx.buffer_texture, NULL, NULL);
         }
         
-        render(dt);
-
-        SDL_UpdateTexture(ctx.buffer_texture, NULL, frame_buffer, sizeof(uint32_t)*WIDTH);
-        SDL_RenderCopy(ctx.renderer, ctx.buffer_texture, NULL, NULL);
         SDL_RenderPresent(ctx.renderer);
-
+        
         if (time_to_wait > 0 && time_to_wait < MS_PER_FRAME) {
             SDL_Delay(time_to_wait);
         }
