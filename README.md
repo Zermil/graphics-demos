@@ -2,6 +2,11 @@
 
 Demo examples for some of my [math-writeups](https://github.com/Zermil/math-writeups) using [SDL2](https://www.libsdl.org/)
 
+### Instructions
+
+ `[SPACE]` - Pause/Resume  
+ `[ESC]/[Q]` - Exit
+
 ### Compile/Build
 
 ```console
