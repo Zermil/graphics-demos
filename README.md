@@ -2,18 +2,26 @@
 
 Demo examples for some of my [math-writeups](https://github.com/Zermil/math-writeups) using [SDL2](https://www.libsdl.org/)
 
-### Instructions
+## Instructions
 
  `[SPACE]` - Pause/Resume  
  `[ESC]/[Q]` - Exit
 
-### Compile/Build
+## Preview
+
+### Barycentric coordinates
+![](./img/barycentric.gif) 
+
+### Rectangles 
+![](./img/rectangles.gif)
+
+## Compile/Build
 
 ```console
 > build.bat
 ```
 
-### Run
+## Run
 
 ```console
 > cd build
