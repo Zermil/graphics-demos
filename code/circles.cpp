@@ -34,7 +34,7 @@ internal void render_fill_circle(int cx, int cy, int r, uint32_t colour)
     // line based on the fact that in a while loop we're instantly incrementing y value.
     render_horizontal_line(cx-r, cx+r, cy, colour);
     
-    while (x > y) {
+    while (x >= y) {
         y += 1;
 
         if (p <= 0) {
