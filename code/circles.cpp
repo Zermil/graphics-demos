@@ -4,6 +4,8 @@
 #define CIRCLES_PAD 65
 #define CIRCLES_WIDTH ((CIRCLES_SIZE - 1)*CIRCLES_PAD)
 
+global float g_angle = 0.0f;
+
 // @Note: Simple linear interpolation, probably the most useful
 // and one of my favourite functions.
 internal inline float lerpf(float a, float b, float t)
@@ -53,7 +55,9 @@ internal void render_fill_circle(int cx, int cy, int r, uint32_t colour)
 
 internal void render(float dt)
 {
-    UNUSED(dt);
+    g_angle += TURNS(0.15f)*dt;
+    float sine = (sinf(g_angle) + 1)/2;
+    float cosine = (cosf(g_angle) + 1)/2;
 
     for (int y = 0; y < CIRCLES_SIZE; ++y) {
         for (int x = 0; x < CIRCLES_SIZE; ++x) {
@@ -62,9 +66,9 @@ internal void render(float dt)
             int cx = (WIDTH/2 - CIRCLES_WIDTH/2) + x*CIRCLES_PAD;
             int cy = (HEIGHT/2 - CIRCLES_WIDTH/2) + y*CIRCLES_PAD;
 
-            unsigned int r = (unsigned int) (255.0f * x/CIRCLES_SIZE);
-            unsigned int g = (unsigned int) (255.0f * y/CIRCLES_SIZE);
-            uint32_t colour = ((r << 3*8) | (g << 2*8) | (0x00 << 1*8) | 0xFF);
+            unsigned int r = (unsigned int) ((255.0f * x/CIRCLES_SIZE) * sine);
+            unsigned int g = (unsigned int) ((255.0f * y/CIRCLES_SIZE) * cosine);
+            uint32_t colour = ((r << 3*8) | (g << 2*8) | (0x30 << 1*8) | 0xFF);
             
             render_fill_circle(cx, cy, rx + ry, colour);
         }
