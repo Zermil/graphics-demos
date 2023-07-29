@@ -11,6 +11,7 @@
 #define TURNS(x) (MATH_TAU*(x))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define ABS(a) ((a) < 0 ? -(a) : (a))
 #define UNUSED(x) ((void)(x))
 #define ERROR_EXIT(cond, msg, ...)                  \
     do {                                            \
