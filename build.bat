@@ -10,9 +10,10 @@ call %MSVC_PATH%\vcvars64.bat
 
 pushd %~dp0
 if not exist .\build mkdir build
-cl %CXXFLAGS% %INCLUDES% "code\barycentric.cpp" /Fo:build\ /Fe:build\barycentric.exe /link %LIBS% /SUBSYSTEM:WINDOWS
-cl %CXXFLAGS% %INCLUDES% "code\rectangles.cpp" /Fo:build\ /Fe:build\rectangles.exe /link %LIBS% /SUBSYSTEM:WINDOWS
-cl %CXXFLAGS% %INCLUDES% "code\circles.cpp" /Fo:build\ /Fe:build\circles.exe /link %LIBS% /SUBSYSTEM:WINDOWS
+cl %CXXFLAGS% %INCLUDES% "code\barycentric.cpp" /Fo:build\ /Fe:build\barycentric.exe /link %LIBS% /SUBSYSTEM:CONSOLE
+cl %CXXFLAGS% %INCLUDES% "code\rectangles.cpp" /Fo:build\ /Fe:build\rectangles.exe /link %LIBS% /SUBSYSTEM:CONSOLE
+cl %CXXFLAGS% %INCLUDES% "code\circles.cpp" /Fo:build\ /Fe:build\circles.exe /link %LIBS% /SUBSYSTEM:CONSOLE
+cl %CXXFLAGS% %INCLUDES% "code\voronoi.cpp" /Fo:build\ /Fe:build\voronoi.exe /link %LIBS% /SUBSYSTEM:CONSOLE
 
 cd build
 del *.obj
