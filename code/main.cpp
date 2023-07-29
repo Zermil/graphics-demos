@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <time.h>
 #include <math.h>
 
 #include <SDL2/SDL.h>
@@ -79,6 +80,8 @@ int main(int argc, char **argv)
     UNUSED(argc);
     UNUSED(argv);
 
+    srand((unsigned int) time(0));
+    
     Render_Context ctx = create_render_context(WIDTH, HEIGHT, "A window");
     bool should_quit = false;
     bool paused = false;
