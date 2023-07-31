@@ -1,4 +1,4 @@
-#include "main.cpp"
+#include "../main.cpp"
 
 #define CIRCLES_SIZE 8
 #define CIRCLES_PAD 65

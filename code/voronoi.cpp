@@ -1,4 +1,4 @@
-#include "main.cpp"
+#include "../main.cpp"
 
 #define WAIT_FOR 6.0f
 #define SEEDS_SZ 8

@@ -1,4 +1,4 @@
-#include "main.cpp"
+#include "../main.cpp"
 
 // @Note: There is an algorithm for midpoint ellipse, but I feel
 // like this gets the points across and is easier to understand at a glance.

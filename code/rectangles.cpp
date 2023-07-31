@@ -1,4 +1,4 @@
-#include "main.cpp"
+#include "../main.cpp"
 
 global float g_angle = 0.0f;
 
