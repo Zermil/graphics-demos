@@ -1,7 +1,7 @@
 # graphics-demos
 
 Demo examples for some of my [math-writeups](https://github.com/Zermil/math-writeups) made with [SDL2](https://www.libsdl.org/)
-and frame buffer for CPU/memory graphics.
+and frame buffer for CPU/memory graphics. All the demos are contained in `code` folder, `main.cpp` is just to launch the window and handle events.
 
 ## Instructions
 
