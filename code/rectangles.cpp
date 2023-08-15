@@ -7,9 +7,19 @@ struct Vec2 {
     int y;
 };
 
+struct Vec2f {
+    float x;
+    float y;
+};
+
 internal inline int vec2_dot(Vec2 *a, Vec2 *b)
 {
     return(a->x*b->x + a->y*b->y);
+}
+
+internal inline float vec2f_length(Vec2f vec)
+{    
+    return(sqrtf(vec.x*vec.x + vec.y*vec.y));
 }
 
 // @Note: This is just the basic formula for point/vector rotation.
@@ -50,6 +60,29 @@ internal void render_simple_rectangle(int x0, int y0, int w, int h, uint32_t col
             if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) continue;
 
             ARRAY_AT(frame_buffer, x, y) = colour;
+        }
+    }
+}
+
+// @Note: Using SDFs (Signed distance fields) to render a rounded rectangle, typically
+// something like this would be done on a shader, but this is for demo purposes meant to be
+// quickly understood by most.
+internal void render_rounded_rectangle(int x0, int y0, int w, int h, int r, uint32_t colour)
+{
+    for (int y = y0; y <= y0 + h; ++y) {
+        for (int x = x0; x <= x0 + w; ++x) {
+            // @Note: Boundary check.
+            if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) continue;
+            
+            Vec2 p = { x - (x0 + w/2), y - (y0 + h/2) };
+            
+            // @Note: AFAIK - We're subtracting w/2 and h/2 because (look above) we
+            // added w/2 and h/2 and we just need to check the corner here.
+            Vec2 q = { ABS(p.x) - w/2 + r, ABS(p.y) - h/2 + r };
+            
+            float outside = vec2f_length({ MAX(q.x, 0.0f), MAX(q.y, 0.0f) });
+            float inside = MIN(MAX(q.x, q.y), 0.0f) - r;            
+            if (outside + inside <= 0.0f) ARRAY_AT(frame_buffer, x, y) = colour;
         }
     }
 }
@@ -130,10 +163,10 @@ internal void render(float dt)
         int h = 150;
         
         Vec2 p[] = {
-            { WIDTH/2 - w/2, HEIGHT/2 },
-            { WIDTH/2 + w/2, HEIGHT/2 },
-            { WIDTH/2 + w/2, HEIGHT/2 + h },
-            { WIDTH/2 - w/2, HEIGHT/2 + h },
+            { WIDTH/2 - w/2, HEIGHT/2 + 100},
+            { WIDTH/2 + w/2, HEIGHT/2 + 100},
+            { WIDTH/2 + w/2, HEIGHT/2 + 100 + h },
+            { WIDTH/2 - w/2, HEIGHT/2 + 100 + h },
         };
         
         Vec2 centroid = {
@@ -143,5 +176,14 @@ internal void render(float dt)
         
         vec2_rotate_many_points_around(p, ARRAY_SIZE(p), &centroid);
         render_rectangle_quad(p[0].x, p[0].y, p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y, 0x5BCEFAFF);
+    }
+
+    // @Note: Rounded rectangle.
+    {
+        int w = 200;
+        int h = 120;
+        int r = 15;
+        
+        render_rounded_rectangle(WIDTH/2 - w/2, HEIGHT/2 - h/2 - r, w, h, r, 0xEF7627FF);
     }
 }
