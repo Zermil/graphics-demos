@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 
     Vec2f player = { 22.0f, 12.0f };
     Vec2f dir = { -1.0f, 0.0f };
-    Vec2f plane = { 0.0f, 1.0f };
+    Vec2f plane = { 0.0f, 0.66f };
     
     // @Note: Rendering part
     Render_Context ctx = render_create_context("A window", WIN_WIDTH, WIN_HEIGHT);
@@ -212,10 +212,16 @@ int main(int argc, char **argv)
                 default: SDL_SetRenderDrawColor(ctx.renderer, colour_val, colour_val, 0, 255); break;
             }
 
-            float dist = WIN_HEIGHT / (length.x - ray_step.x);
-            if (side_hit) dist = WIN_HEIGHT / (length.y - ray_step.y);
+            Vec2f intersection = vec2f_add(player, vec2f_mult(ray_dir, distance));
+            Vec2f ray = vec2f_sub(intersection, player);
             
-            SDL_RenderDrawLineF(ctx.renderer, (float) x, WIN_HEIGHT/2 - dist, (float) x, WIN_HEIGHT/2 + dist);
+            float dir_angle = atan2f(dir.y, dir.x);
+            float ray_angle = atan2f(ray.y, ray.x);
+
+            float angle = ray_angle - dir_angle;
+            float dist = WIN_HEIGHT / (vec2f_len(ray) * cosf(angle));
+            
+            SDL_RenderDrawLineF(ctx.renderer, (float) x, -dist + WIN_HEIGHT/2, (float) x, dist + WIN_HEIGHT/2);
         }
 
         SDL_RenderPresent(ctx.renderer);
