@@ -35,7 +35,16 @@ internal void render(float dt)
     UNUSED(dt);
     
     Vec2f A = { 0.0f, 0.0f };
-    Vec2f B = { WIDTH*.5f, HEIGHT*.5f };
+    Vec2f B = { WIDTH*.5f, 0.0f };
+    Vec2f C = { WIDTH, 0.0f };
+    Vec2f D = { WIDTH, HEIGHT*.5f };
+    Vec2f E = { WIDTH, HEIGHT };
+    Vec2f F = { WIDTH*.5f, HEIGHT };
+    Vec2f G = { 0, HEIGHT };
+    Vec2f H = { 0, HEIGHT*.5f };
     
-    render_line(A, B, 0xFF0000FF);
+    render_line(A, E, 0xFF0000FF);
+    render_line(B, F, 0x00FF00FF);
+    render_line(C, G, 0x0000FFFF);
+    render_line(D, H, 0xFFFF00FF);
 }
